@@ -254,12 +254,11 @@ const Register = () => {
               Sign In
             </Link>
           </p>
+          {toast && (
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} duration={toast.duration} inline />
+          )}
         </div>
       </motion.div>
-
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} duration={toast.duration} />
-      )}
     </div>
   );
 };

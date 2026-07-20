@@ -262,6 +262,79 @@ const Login = () => {
           ) : (
             /* ── Standard Login Form ── */
             <>
+              {/* Social auth */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={handlePasskeyLogin}
+                  className="col-span-2 flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
+                  style={{
+                    background: 'var(--bg-hover)',
+                    border: '1px solid var(--border-soft)',
+                    color: 'var(--text-secondary)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                >
+                  <Fingerprint className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+                  Passkey
+                </button>
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
+                  style={{
+                    background: 'var(--bg-hover)',
+                    border: '1px solid var(--border-soft)',
+                    color: 'var(--text-secondary)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                >
+                  <GoogleIcon />
+                  Google
+                </button>
+                <button
+                  type="button"
+                  onClick={handleMicrosoftLogin}
+                  className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
+                  style={{
+                    background: 'var(--bg-hover)',
+                    border: '1px solid var(--border-soft)',
+                    color: 'var(--text-secondary)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                >
+                  <MicrosoftIcon />
+                  Microsoft
+                </button>
+                {/* <button
+                  type="button"
+                  onClick={handleGithubLogin}
+                  className="col-span-2 flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
+                  style={{
+                    background: 'var(--bg-hover)',
+                    border: '1px solid var(--border-soft)',
+                    color: 'var(--text-secondary)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                >
+                  <GithubIcon />
+                  GitHub
+                </button> */}
+              </div>
+
+              {/* Divider */}
+              <div className="relative my-5 flex items-center gap-3">
+                <div className="flex-1 h-px" style={{ background: 'var(--border-soft)' }} />
+                <span className="text-[10px] font-medium uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+                  or
+                </span>
+                <div className="flex-1 h-px" style={{ background: 'var(--border-soft)' }} />
+              </div>
+
               <form onSubmit={handleLogin} className="space-y-4">
                 {/* Email */}
                 <div>
@@ -324,88 +397,13 @@ const Login = () => {
                   Enter Dashboard
                 </button>
               </form>
-
-              {/* Divider */}
-              <div className="relative my-5 flex items-center gap-3">
-                <div className="flex-1 h-px" style={{ background: 'var(--border-soft)' }} />
-                <span className="text-[10px] font-medium uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
-                  or
-                </span>
-                <div className="flex-1 h-px" style={{ background: 'var(--border-soft)' }} />
-              </div>
-
-              {/* Social auth */}
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={handleGoogleLogin}
-                  className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
-                  style={{
-                    background: 'var(--bg-hover)',
-                    border: '1px solid var(--border-soft)',
-                    color: 'var(--text-secondary)',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-                >
-                  <GoogleIcon />
-                  Google
-                </button>
-                <button
-                  type="button"
-                  onClick={handleMicrosoftLogin}
-                  className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
-                  style={{
-                    background: 'var(--bg-hover)',
-                    border: '1px solid var(--border-soft)',
-                    color: 'var(--text-secondary)',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-                >
-                  <MicrosoftIcon />
-                  Microsoft
-                </button>
-                <button
-                  type="button"
-                  onClick={handleGithubLogin}
-                  className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
-                  style={{
-                    background: 'var(--bg-hover)',
-                    border: '1px solid var(--border-soft)',
-                    color: 'var(--text-secondary)',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-                >
-                  <GithubIcon />
-                  GitHub
-                </button>
-                <button
-                  type="button"
-                  onClick={handlePasskeyLogin}
-                  className="flex items-center justify-center gap-2 py-2.5 text-xs font-medium transition-colors"
-                  style={{
-                    background: 'var(--bg-hover)',
-                    border: '1px solid var(--border-soft)',
-                    color: 'var(--text-secondary)',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-input)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-soft)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-                >
-                  <Fingerprint className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-                  Passkey
-                </button>
-              </div>
-
             </>
+          )}
+          {toast && (
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} inline />
           )}
         </motion.div>
       </div>
-
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
-      )}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide-react';
 
-const Toast = ({ message, type = 'success', onClose, duration = 4000 }) => {
+const Toast = ({ message, type = 'success', onClose, duration = 4000, inline = false }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -26,10 +26,13 @@ const Toast = ({ message, type = 'success', onClose, duration = 4000 }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      initial={inline ? { opacity: 0, y: 10 } : { opacity: 0, y: 50, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-      className={`fixed bottom-5 right-5 z-50 flex items-center gap-3 p-4 rounded-xl border backdrop-blur-md shadow-lg min-w-[300px] max-w-[450px] ${colors[type]}`}
+      exit={inline ? { opacity: 0, y: 10 } : { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+      className={inline 
+        ? `w-full mt-4 flex items-center gap-3 p-3 rounded-xl border backdrop-blur-md ${colors[type]}`
+        : `fixed bottom-5 right-5 z-50 flex items-center gap-3 p-4 rounded-xl border backdrop-blur-md shadow-lg min-w-[300px] max-w-[450px] ${colors[type]}`
+      }
     >
       <div className="flex-shrink-0">{icons[type]}</div>
       <div className="flex-grow text-sm font-medium pr-2">{message}</div>

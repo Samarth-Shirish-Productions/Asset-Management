@@ -240,6 +240,30 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
+// 6.5 Verify Reset Password OTP
+exports.verifyResetOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ success: false, message: 'Email and OTP are required' });
+    }
+    const user = await User.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP code' });
+    }
+
+    res.json({ success: true, message: 'OTP verified successfully!' });
+  } catch (error) {
+    console.error('Verify reset OTP error:', error);
+    res.status(500).json({ success: false, message: 'Server error during OTP verification' });
+  }
+};
+
 // 7. Reset Password
 exports.resetPassword = async (req, res) => {
   try {

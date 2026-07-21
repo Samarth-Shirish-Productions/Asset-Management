@@ -66,13 +66,13 @@ export const AuthProvider = ({ children }) => {
     try {
       // 1. Fetch authentication options
       const optionsRes = await api.get('/auth/passkey/login-options');
-      const options = optionsRes.data;
+      const { challengeToken, ...options } = optionsRes.data;
 
       // 2. Authenticate using browser credentials API
-      const credential = await startAuthentication(options);
+      const credential = await startAuthentication({ optionsJSON: options });
 
-      // 3. Verify assertion with backend
-      const verifyRes = await api.post('/auth/passkey/login-verify', credential);
+      // 3. Verify assertion with backend — echo challengeToken so server can look up the challenge
+      const verifyRes = await api.post('/auth/passkey/login-verify', { ...credential, challengeToken });
       
       if (verifyRes.data.accessToken) {
         localStorage.setItem('token', verifyRes.data.accessToken);

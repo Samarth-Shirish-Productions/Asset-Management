@@ -11,7 +11,7 @@ import Assets from './pages/Assets';
 import Requests from './pages/Requests';
 import Settings from './pages/Settings';
 import PublicScan from './pages/PublicScan';
-import AddUser from './pages/AddUser';
+import Participants from './pages/Participants';
 import OrgSetup from './pages/OrgSetup';
 
 // Components
@@ -490,7 +490,8 @@ const App = () => {
               <Route path="/assets" element={<Assets />} />
               <Route path="/requests" element={<Requests />} />
               <Route path="/settings" element={<Settings />} />
-              <Route path="/add-user" element={<AdminRoute><AddUser /></AdminRoute>} />
+              {/* <Route path="/employees" element={<AdminRoute><Participants /></AdminRoute>} /> */}
+              <Route path="/users" element={<AdminRoute><Participants /></AdminRoute>} />
               <Route path="/org-setup" element={<AdminRoute><OrgSetup /></AdminRoute>} />
             </Route>
 

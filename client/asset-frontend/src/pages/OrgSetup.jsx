@@ -161,7 +161,7 @@ const OrgSetup = () => {
   ];
 
   return (
-    <div className="page-container space-y-6">
+    <div className="space-y-6">
       <div className="page-header">
         <div>
           <p className="breadcrumb mb-1">// ORGANIZATION</p>
@@ -194,8 +194,8 @@ const OrgSetup = () => {
         <div className="card p-6 flex flex-col min-h-[400px]">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-2">
-               <Building className="w-5 h-5 opacity-50" style={{ color: 'var(--text-primary)' }} />
-               <h3 className="font-bold text-sm uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Departments</h3>
+              <Building className="w-5 h-5 opacity-50" style={{ color: 'var(--text-primary)' }} />
+              <h3 className="font-bold text-sm uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Departments</h3>
             </div>
             <button
               onClick={() => { setDeptForm({ id: null, name: '', branch: '' }); setDeptModal(true); }}

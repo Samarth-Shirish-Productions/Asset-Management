@@ -97,6 +97,11 @@ exports.login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid credentials' });
     }
 
+    // TEMPORARY: Restrict login to Administrators only
+    if (user.role !== 'Admin') {
+      return res.status(403).json({ success: false, message: 'Login is temporarily restricted to Administrators only.' });
+    }
+
     // Check account lock status
     if (user.lockUntil && user.lockUntil > Date.now()) {
       const remainingMinutes = Math.ceil((user.lockUntil - Date.now()) / (60 * 1000));

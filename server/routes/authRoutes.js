@@ -54,6 +54,8 @@ router.get('/passkey/register-options', protect, passkeyController.registerOptio
 router.post('/passkey/register-verify', protect, passkeyController.registerVerify);
 router.get('/passkey/login-options', passkeyController.loginOptions);
 router.post('/passkey/login-verify', passkeyController.loginVerify);
+router.get('/passkey/list', protect, passkeyController.listPasskeys);
+router.delete('/passkey/:credentialId', protect, passkeyController.deletePasskey);
 
 // Google OAuth Strategy Routes
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));

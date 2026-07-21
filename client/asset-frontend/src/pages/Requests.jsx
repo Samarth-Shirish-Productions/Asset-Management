@@ -8,13 +8,13 @@ import { Check, X, ShieldAlert, FileText, Calendar, User, CornerDownRight } from
 
 const Requests = () => {
   const { user } = useAuth();
-  
+
   // States
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const [filter, setFilter] = useState('All');
-  
+
   // Modal controls
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -45,7 +45,7 @@ const Requests = () => {
   const handleProcessRequest = async (e) => {
     e.preventDefault();
     const status = actionType === 'Approve' ? 'Approved' : 'Rejected';
-    
+
     try {
       await api.put(`/requests/${selectedRequest._id}`, {
         status,
@@ -89,9 +89,8 @@ const Requests = () => {
       label: 'Request Type',
       key: 'requestType',
       render: (row) => (
-        <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${
-          row.requestType === 'Removal' ? 'bg-amber-500/10 text-amber-500' : 'bg-indigo-500/10 text-indigo-500'
-        }`}>
+        <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${row.requestType === 'Removal' ? 'bg-amber-500/10 text-amber-500' : 'bg-indigo-500/10 text-indigo-500'
+          }`}>
           {row.requestType}
         </span>
       )
@@ -142,7 +141,7 @@ const Requests = () => {
             </div>
           );
         }
-        
+
         return (
           <span className="text-slate-400 font-semibold text-xs italic">
             {row.adminRemarks ? `Remarks: ${row.adminRemarks}` : '—'}
@@ -153,7 +152,7 @@ const Requests = () => {
   ];
 
   const filteredRequests = requests.filter(req => filter === 'All' || req.status === filter);
-  
+
   const counts = {
     Pending: requests.filter(r => r.status === 'Pending').length,
     Approved: requests.filter(r => r.status === 'Approved').length,
@@ -161,7 +160,7 @@ const Requests = () => {
   };
 
   return (
-    <div className="page-container space-y-6">
+    <div className="space-y-6">
       {/* Page Header */}
       <div className="page-header">
         <div>
@@ -172,7 +171,7 @@ const Requests = () => {
             {user.role === 'Admin' ? 'Approve or reject asset removals and reassignment logs.' : 'Track the review pipeline of your release requests.'}
           </p>
         </div>
-        
+
         {/* Status Counts */}
         <div className="hidden sm:flex items-center gap-3">
           <div className="flex flex-col items-end">
@@ -259,9 +258,8 @@ const Requests = () => {
 
             <button
               type="submit"
-              className={`w-full py-3.5 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-colors ${
-                actionType === 'Approve' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'
-              }`}
+              className={`w-full py-3.5 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-colors ${actionType === 'Approve' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'
+                }`}
             >
               Confirm {actionType}
             </button>

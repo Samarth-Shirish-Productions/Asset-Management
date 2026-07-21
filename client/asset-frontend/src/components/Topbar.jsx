@@ -17,9 +17,9 @@ const routeLabels = {
 };
 
 const iconMap = {
-  warranty:         <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />,
-  request:          <ClipboardCheck className="w-3.5 h-3.5 text-blue-400" />,
-  'request-update': <Info className="w-3.5 h-3.5 text-emerald-400" />,
+  warranty:         <ShieldAlert className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />,
+  request:          <ClipboardCheck className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />,
+  'request-update': <Info className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />,
 };
 
 const Topbar = ({ toggleSidebar }) => {
@@ -101,24 +101,23 @@ const Topbar = ({ toggleSidebar }) => {
 
   return (
     <header
-      className="glass sticky top-0 z-30 flex items-center justify-between px-5 py-3"
+      className="sticky top-0 z-30 flex items-center justify-between px-5 py-3 border-b border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 transition-colors duration-200"
     >
       {/* ── Left: hamburger + breadcrumb ── */}
       <div className="flex items-center gap-4">
         <button
           onClick={toggleSidebar}
-          className="lg:hidden w-8 h-8 flex items-center justify-center transition-colors"
-          style={{ background: 'var(--bg-hover)', color: 'var(--text-secondary)' }}
+          className="lg:hidden w-8 h-8 flex items-center justify-center rounded transition-colors bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-500 dark:text-zinc-400"
         >
           <Menu className="w-4 h-4" />
         </button>
 
         {/* Breadcrumb path */}
         <div>
-          <p className="breadcrumb" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-[10px] tracking-wider font-mono text-slate-400 dark:text-zinc-500 uppercase">
             // {pageLabel.toUpperCase()}
           </p>
-          <p className="text-sm font-semibold mt-0.5" style={{ color: 'var(--text-primary)' }}>
+          <p className="text-sm font-semibold mt-0.5 text-slate-700 dark:text-zinc-200">
             {pageLabel}
           </p>
         </div>
@@ -131,22 +130,17 @@ const Topbar = ({ toggleSidebar }) => {
         <button
           onClick={toggleTheme}
           title="Toggle theme"
-          className="w-8 h-8 flex items-center justify-center transition-colors"
-          style={{
-            background: 'var(--bg-hover)',
-            border: '1px solid var(--border-soft)',
-            color: 'var(--text-secondary)',
-          }}
+          className="w-8 h-8 flex items-center justify-center rounded transition-colors border border-slate-200 dark:border-zinc-800 bg-slate-50 hover:bg-slate-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-500 dark:text-zinc-400"
         >
           {theme === 'light' ? (
-            <Moon className="w-3.5 h-3.5 text-zinc-500" />
+            <Moon className="w-3.5 h-3.5 text-slate-500" />
           ) : (
             <Sun className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           )}
         </button>
 
         {/* Date */}
-        <span className="hidden sm:block mono text-xs" style={{ color: 'var(--text-muted)' }}>
+        <span className="hidden sm:block font-mono text-xs text-slate-400 dark:text-zinc-500">
           {today}
         </span>
 
@@ -154,23 +148,17 @@ const Topbar = ({ toggleSidebar }) => {
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setShowNotifications(v => !v)}
-            className="w-8 h-8 flex items-center justify-center relative transition-colors"
-            style={{
-              background: 'var(--bg-hover)',
-              border: '1px solid var(--border-soft)',
-              color: 'var(--text-secondary)',
-            }}
+            className="w-8 h-8 flex items-center justify-center rounded relative transition-colors border border-slate-200 dark:border-zinc-800 bg-slate-50 hover:bg-slate-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-500 dark:text-zinc-400"
           >
             <Bell className="w-3.5 h-3.5" />
             {notifications.length > 0 && (
               <span
-                className="absolute top-1.5 right-1.5 w-1.5 h-1.5"
-                style={{ background: '#ef4444' }}
+                className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"
               />
             )}
           </button>
 
-          {/* Dropdown */}
+          {/* Dropdown menu */}
           <AnimatePresence>
             {showNotifications && (
               <motion.div
@@ -178,27 +166,20 @@ const Topbar = ({ toggleSidebar }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 mt-2 w-80 z-50 overflow-hidden"
-                style={{
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border-soft)',
-                  boxShadow: 'var(--shadow-lg)',
-                }}
+                className="absolute right-0 mt-2 w-80 z-50 overflow-hidden rounded-md border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl"
               >
-                {/* Header */}
+                {/* Dropdown Header */}
                 <div
-                  className="flex items-center justify-between px-4 py-2.5"
-                  style={{ borderBottom: '1px solid var(--border-soft)' }}
+                  className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950"
                 >
                   <div className="flex items-center gap-2">
-                    <Bell className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-                    <span className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    <Bell className="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" />
+                    <span className="text-xs font-semibold text-slate-700 dark:text-zinc-200">
                       Notifications
                     </span>
                     {notifications.length > 0 && (
                       <span
-                        className="inline-flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white"
-                        style={{ background: 'var(--accent)' }}
+                        className="inline-flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white dark:text-zinc-950 rounded-full bg-blue-600 dark:bg-amber-400"
                       >
                         {notifications.length}
                       </span>
@@ -206,19 +187,18 @@ const Topbar = ({ toggleSidebar }) => {
                   </div>
                   <button
                     onClick={() => setShowNotifications(false)}
-                    className="w-5 h-5 flex items-center justify-center transition-colors"
-                    style={{ color: 'var(--text-muted)' }}
+                    className="w-5 h-5 flex items-center justify-center text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-300 transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
                 </div>
 
-                {/* Items */}
-                <div className="max-h-64 overflow-y-auto">
+                {/* Items wrapper */}
+                <div className="max-h-64 overflow-y-auto divide-y divide-slate-100 dark:divide-zinc-800/50">
                   {notifications.length === 0 ? (
                     <div className="py-8 text-center">
-                      <Bell className="w-6 h-6 mx-auto mb-2 opacity-20" style={{ color: 'var(--text-muted)' }} />
-                      <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                      <Bell className="w-6 h-6 mx-auto mb-2 opacity-20 text-slate-400 dark:text-zinc-400" />
+                      <p className="text-xs font-medium text-slate-400 dark:text-zinc-500">
                         All caught up
                       </p>
                     </div>
@@ -226,20 +206,16 @@ const Topbar = ({ toggleSidebar }) => {
                     notifications.map(item => (
                       <div
                         key={item.id}
-                        className="flex gap-3 px-4 py-3 cursor-default"
-                        style={{ borderBottom: '1px solid var(--border-soft)' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-hover)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = '')}
+                        className="flex gap-3 px-4 py-3 cursor-default transition-colors bg-white hover:bg-slate-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
                       >
-                        <div className="flex-shrink-0 w-7 h-7 flex items-center justify-center mt-0.5"
-                          style={{ background: 'var(--bg-hover)' }}>
+                        <div className="flex-shrink-0 w-7 h-7 flex items-center justify-center mt-0.5 rounded bg-slate-100 dark:bg-zinc-950">
                           {iconMap[item.type]}
                         </div>
                         <div className="flex-grow min-w-0">
-                          <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
+                          <p className="text-xs font-semibold truncate text-slate-700 dark:text-zinc-200">
                             {item.title}
                           </p>
-                          <p className="text-[10px] mt-0.5 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                          <p className="text-[10px] mt-0.5 leading-relaxed text-slate-500 dark:text-zinc-400">
                             {item.details}
                           </p>
                         </div>

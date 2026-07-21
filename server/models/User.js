@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
       credentialPublicKey: { type: String, required: true },
       counter: { type: Number, default: 0 },
       transports: [String],
+      createdAt: { type: Date, default: Date.now },
     }
   ],
   loginAttempts: { type: Number, default: 0 },

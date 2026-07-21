@@ -101,9 +101,9 @@ const StatCard = ({ label, value, icon: Icon, color, delay = 0 }) => (
       </p>
     </div>
     {/* Subtle hover gradient background */}
-    <div 
+    <div
       className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none"
-      style={{ background: `linear-gradient(45deg, ${color}22, transparent)` }} 
+      style={{ background: `linear-gradient(45deg, ${color}22, transparent)` }}
     />
   </motion.div>
 );
@@ -221,7 +221,7 @@ const Dashboard = () => {
     ];
 
     return (
-      <div className="page-container space-y-6">
+      <div className="space-y-6">
         <div className="page-header">
           <div>
             <h1 className="page-title">Good morning, {user?.fullName?.split(' ')[0] || 'Admin'}</h1>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   UserPlus, Upload, X, FileSpreadsheet, CheckCircle2,
@@ -15,12 +16,12 @@ import Modal from '../components/Modal';
    CONSTANTS & FORMAT GUIDE
 ───────────────────────────────────────────────────────────────── */
 const EXCEL_COLUMNS = [
-  { name: 'fullName',   required: true,  desc: 'Full name of the user',                     example: 'John Doe' },
-  { name: 'email',      required: true,  desc: 'Unique email address',                       example: 'john@company.com' },
-  { name: 'department', required: true,  desc: 'Department (e.g. Engineering, Finance)',     example: 'Engineering' },
-  { name: 'branch',     required: true,  desc: 'Branch / location',                          example: 'Head Office' },
-  { name: 'role',       required: false, desc: 'Admin or Employee (defaults to Employee)',   example: 'Employee' },
-  { name: 'password',   required: false, desc: 'Initial password (omit to send email link)', example: '' },
+  { name: 'fullName', required: true, desc: 'Full name of the user', example: 'John Doe' },
+  { name: 'email', required: true, desc: 'Unique email address', example: 'john@company.com' },
+  { name: 'department', required: true, desc: 'Department (e.g. Engineering, Finance)', example: 'Engineering' },
+  { name: 'branch', required: true, desc: 'Branch / location', example: 'Head Office' },
+  { name: 'role', required: false, desc: 'Admin or Employee (defaults to Employee)', example: 'Employee' },
+  { name: 'password', required: false, desc: 'Initial password (omit to send email link)', example: '' },
 ];
 
 const FormatGuideModal = ({ onClose, fileInputRef }) => (
@@ -38,7 +39,7 @@ const FormatGuideModal = ({ onClose, fileInputRef }) => (
           style={{ borderBottom: '1px solid var(--border-soft)' }}
         >
           <p className="breadcrumb">// FORMAT GUIDE</p>
-          <button onClick={onClose} style={{ color: 'var(--text-muted)' }}><X className="w-4 h-4"/></button>
+          <button onClick={onClose} style={{ color: 'var(--text-muted)' }}><X className="w-4 h-4" /></button>
         </div>
         <div className="p-5 space-y-4">
           <div className="overflow-x-auto">
@@ -77,7 +78,7 @@ const BulkResultsModal = ({ results, onClose }) => (
         {[
           { label: 'Total', value: results.total, color: 'var(--accent)' },
           { label: 'Success', value: results.success, color: '#4ade80' },
-          { label: 'Failed',  value: results.failed,  color: '#f87171' },
+          { label: 'Failed', value: results.failed, color: '#f87171' },
         ].map(({ label, value, color }) => (
           <div key={label} className="p-3" style={{ background: 'var(--bg-hover)', border: '1px solid var(--border-soft)' }}>
             <p className="text-lg font-black" style={{ color }}>{value}</p>
@@ -119,9 +120,22 @@ const inputCls = "w-full py-2.5 px-3.5 text-sm font-medium";
 /* ─────────────────────────────────────────────────────────────────
    MAIN User Management PAGE
 ───────────────────────────────────────────────────────────────── */
-const UserManagement = () => {
+const Participants = () => {
+  const location = useLocation();
   const [tab, setTab] = useState('manage'); // 'manage' | 'individual' | 'bulk'
   const [toast, setToast] = useState(null);
+
+  // Filter & Pagination
+  const [searchQuery, setSearchQuery] = useState('');
+  const [branchFilter, setBranchFilter] = useState('');
+  const [deptFilter, setDeptFilter] = useState('');
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const roleFilter = location.pathname.includes('/employees') ? 'Employee' : location.pathname.includes('/users') ? 'Admin' : 'All';
+
+  useEffect(() => {
+    setPage(1);
+  }, [roleFilter, searchQuery, branchFilter, deptFilter]);
 
   // Data
   const [users, setUsers] = useState([]);
@@ -194,7 +208,7 @@ const UserManagement = () => {
     e.preventDefault();
     const errs = validate(form);
     if (Object.keys(errs).length > 0) return setErrors(errs);
-    
+
     setSubmitting(true);
     try {
       const res = await api.post('/auth/admin/add-user', form);
@@ -266,7 +280,7 @@ const UserManagement = () => {
       label: 'User', key: 'fullName',
       render: (r) => (
         <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0" 
+          <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
             style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
             {r.fullName.substring(0, 2).toUpperCase()}
           </div>
@@ -319,12 +333,31 @@ const UserManagement = () => {
     }
   ];
 
+  const filteredUsers = users.filter(u => {
+    if (roleFilter !== 'All' && u.role !== roleFilter) return false;
+    if (branchFilter && u.branch !== branchFilter) return false;
+    if (deptFilter && u.department !== deptFilter) return false;
+    
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return (
+        (u.fullName && u.fullName.toLowerCase().includes(q)) ||
+        (u.email && u.email.toLowerCase().includes(q)) ||
+        (u.employeeId && u.employeeId.toLowerCase().includes(q))
+      );
+    }
+    return true;
+  });
+
+  const totalPages = Math.ceil(filteredUsers.length / limit) || 1;
+  const paginatedUsers = filteredUsers.slice((page - 1) * limit, page * limit);
+
   return (
-    <div className="page-container space-y-6">
+    <div className="space-y-6">
       {/* ── Page header ── */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">User Management</h1>
+          <h1 className="page-title">{roleFilter === 'Admin' ? 'Users' : 'Employees'}</h1>
           <p className="page-subtitle">Manage system access, roles, and employee records.</p>
         </div>
         <button
@@ -339,9 +372,8 @@ const UserManagement = () => {
       {/* ── Tab strip (pill style) ── */}
       <div className="flex gap-2">
         {[
-          { key: 'manage',     label: 'All Users',   icon: Users },
-          { key: 'individual', label: 'Add User',    icon: UserPlus },
-          { key: 'bulk',       label: 'Bulk Import', icon: Upload },
+          { key: 'manage', label: roleFilter === 'Admin' ? 'All Users' : 'All Employees', icon: Users },
+          ...(roleFilter !== 'Admin' ? [{ key: 'bulk', label: 'Bulk Import', icon: Upload }] : []),
         ].map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -357,11 +389,45 @@ const UserManagement = () => {
         ))}
       </div>
 
-      <AnimatePresence mode="wait">
         {/* Manage Tab — flat table */}
         {tab === 'manage' && (
-          <motion.div key="manage" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <DataTable columns={columns} data={users} loading={loadingUsers} emptyMessage="No users found." />
+          <motion.div key="manage" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <input
+                type="text"
+                placeholder="Search participants..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full max-w-sm py-2 px-3 text-sm font-medium rounded-lg outline-none"
+                style={{ background: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-primary)' }}
+              />
+              <select
+                value={branchFilter}
+                onChange={e => setBranchFilter(e.target.value)}
+                className="py-2 px-3 text-sm font-medium rounded-lg outline-none"
+                style={{ background: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-primary)' }}
+              >
+                <option value="">All Branches</option>
+                {branches.map(b => <option key={b._id} value={b.name}>{b.name}</option>)}
+              </select>
+              <select
+                value={deptFilter}
+                onChange={e => setDeptFilter(e.target.value)}
+                className="py-2 px-3 text-sm font-medium rounded-lg outline-none"
+                style={{ background: 'var(--bg-input)', border: '1px solid var(--border-input)', color: 'var(--text-primary)' }}
+              >
+                <option value="">All Departments</option>
+                {departments.map(d => <option key={d._id} value={d.name}>{d.name}</option>)}
+              </select>
+            </div>
+            <DataTable 
+              columns={columns} 
+              data={paginatedUsers} 
+              loading={loadingUsers} 
+              emptyMessage="No participants found." 
+              pagination={{ page, limit, total: filteredUsers.length, pages: totalPages }}
+              onPageChange={setPage}
+            />
           </motion.div>
         )}
 
@@ -452,8 +518,7 @@ const UserManagement = () => {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
-
+      
       {/* Edit Modal */}
       <Modal isOpen={editModal} onClose={() => setEditModal(false)} title="Edit User">
         <form onSubmit={handleEditSubmit} className="space-y-3">
@@ -518,4 +583,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default Participants;

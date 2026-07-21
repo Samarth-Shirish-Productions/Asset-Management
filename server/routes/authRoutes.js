@@ -35,6 +35,7 @@ router.post('/login', authLimiter, authController.login);
 router.post('/refresh-token', authController.refreshToken);
 router.post('/logout', authController.logout);
 router.post('/forgot-password', authLimiter, authController.forgotPassword);
+router.post('/verify-reset-otp', authLimiter, authController.verifyResetOTP);
 router.post('/reset-password', authLimiter, authController.resetPassword);
 
 // Profile & Logs
@@ -53,9 +54,11 @@ router.get('/passkey/register-options', protect, passkeyController.registerOptio
 router.post('/passkey/register-verify', protect, passkeyController.registerVerify);
 router.get('/passkey/login-options', passkeyController.loginOptions);
 router.post('/passkey/login-verify', passkeyController.loginVerify);
+router.get('/passkey/list', protect, passkeyController.listPasskeys);
+router.delete('/passkey/:credentialId', protect, passkeyController.deletePasskey);
 
 // Google OAuth Strategy Routes
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));
 router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=unauthorized` }), (req, res) => {
   const { generateAccessToken, generateRefreshToken } = require('../utils/jwt');
   const accessToken = generateAccessToken(req.user);
@@ -89,7 +92,7 @@ router.get('/microsoft/callback', passport.authenticate('microsoft', { session: 
 });
 
 // GitHub OAuth Strategy Routes
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+router.get('/github', passport.authenticate('github', { scope: ['user:email'], prompt: 'select_account' }));
 router.get('/github/callback', passport.authenticate('github', { session: false, failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=unauthorized` }), (req, res) => {
   const { generateAccessToken, generateRefreshToken } = require('../utils/jwt');
   const accessToken = generateAccessToken(req.user);

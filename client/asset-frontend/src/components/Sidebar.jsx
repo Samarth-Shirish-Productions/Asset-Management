@@ -12,15 +12,21 @@ import {
   AlertTriangle,
   UserPlus,
   Building,
-  ChevronRight
+  Users,
+  User,
+  Shield,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 const menuItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['Admin', 'Employee'] },
   { name: 'Assets',    path: '/assets',    icon: Boxes,           roles: ['Admin', 'Employee'] },
   { name: 'Requests',  path: '/requests',  icon: ClipboardList,   roles: ['Admin', 'Employee'] },
-  { name: 'Users',     path: '/add-user',  icon: UserPlus,        roles: ['Admin'] },
+  // { name: 'Employees', path: '/employees', icon: User, roles: ['Admin'] },
+  { name: 'Users', path: '/users', icon: Shield, roles: ['Admin'] },
   { name: 'Organization', path: '/org-setup', icon: Building,    roles: ['Admin'] },
+  { name: 'Settings',  path: '/settings',  icon: Settings,        roles: ['Admin', 'Employee'] },
 ];
 
 /* ── Sign-out confirmation dialog ── */
@@ -96,6 +102,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState({ 'Participants': true });
+
+  const toggleDropdown = (name) => {
+    setOpenDropdowns(prev => ({ ...prev, [name]: !prev[name] }));
+  };
 
   const handleLogout = async () => {
     setShowConfirm(false);
@@ -166,16 +177,81 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </div>
 
         {/* ── Navigation ── */}
-        <nav className="flex-1 px-0 py-3 overflow-y-auto">
+        <nav className="flex-1 px-0 py-3 overflow-y-auto space-y-0.5">
           {filtered.map(item => {
             const Icon = item.icon;
+            
+            if (item.children) {
+              const isDropdownOpen = openDropdowns[item.name];
+              return (
+                <div key={item.name}>
+                  <button
+                    onClick={() => toggleDropdown(item.name)}
+                    className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium transition-all duration-100 border-l-2 border-l-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                      {item.name}
+                    </div>
+                    {isDropdownOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden bg-slate-50/50 dark:bg-slate-900/20"
+                      >
+                        {item.children.map(child => {
+                          const ChildIcon = child.icon;
+                          return (
+                            <NavLink
+                              key={child.path}
+                              to={child.path}
+                              end={child.path === '/participants'}
+                              onClick={() => isOpen && toggleSidebar()}
+                              className={({ isActive }) =>
+                                `flex items-center gap-3 pl-11 pr-4 py-2 text-xs font-medium transition-all duration-100 border-l-2 ${
+                                  isActive ? 'nav-active' : 'border-l-transparent'
+                                }`
+                              }
+                              style={({ isActive }) => ({
+                                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                background: isActive ? 'var(--bg-active)' : 'transparent',
+                              })}
+                              onMouseEnter={e => {
+                                if (!e.currentTarget.classList.contains('nav-active')) {
+                                  e.currentTarget.style.background = 'var(--bg-hover)';
+                                  e.currentTarget.style.color = 'var(--text-primary)';
+                                }
+                              }}
+                              onMouseLeave={e => {
+                                if (!e.currentTarget.classList.contains('nav-active')) {
+                                  e.currentTarget.style.background = 'transparent';
+                                  e.currentTarget.style.color = 'var(--text-secondary)';
+                                }
+                              }}
+                            >
+                              <ChildIcon className="w-3 h-3 flex-shrink-0 opacity-70" />
+                              {child.name}
+                            </NavLink>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            }
+
             return (
               <NavLink
                 key={item.path}
                 to={item.path}
                 onClick={() => isOpen && toggleSidebar()}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2.5 text-xs font-medium transition-all duration-100 border-l-2 ${
+                  `flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-all duration-100 border-l-2 ${
                     isActive ? 'nav-active' : 'border-l-transparent'
                   }`
                 }
@@ -203,24 +279,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           })}
         </nav>
 
-        {/* ── Bottom: Add Admins + Signout ── */}
+
+        {/* ── Bottom: Signout ── */}
         <div style={{ borderTop: '1px solid var(--border-soft)' }}>
-          {user?.role === 'Admin' && (
-            <NavLink
-              to="/add-user"
-              className="flex items-center gap-3 px-4 py-3 text-xs font-medium transition-colors"
-              style={{ color: 'var(--text-muted)' }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--text-primary)'; e.currentTarget.style.background = 'var(--bg-hover)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'transparent'; }}
-            >
-              <Settings className="w-3 h-3 flex-shrink-0" />
-              <span>Add Admins</span>
-            </NavLink>
-          )}
 
           <button
             onClick={() => setShowConfirm(true)}
-            className="w-full flex items-center gap-3 px-4 py-3 text-xs font-medium transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors"
             style={{ color: 'var(--text-muted)' }}
             onMouseEnter={e => {
               e.currentTarget.style.color = '#f87171';
@@ -231,7 +296,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               e.currentTarget.style.background = 'transparent';
             }}
           >
-            <ChevronRight className="w-3 h-3 flex-shrink-0" />
+            <LogOut className="w-3 h-3 flex-shrink-0" />
             <span>Signout</span>
           </button>
 

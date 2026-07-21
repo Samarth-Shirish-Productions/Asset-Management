@@ -147,19 +147,19 @@ exports.bulkAddUsers = async (req, res) => {
         return found ? String(row[found]).trim() : '';
       };
 
-      const fullName   = get('fullName');
-      const email      = get('email');
+      const fullName = get('fullName');
+      const email = get('email');
       const department = get('department');
-      const branch     = get('branch');
-      const role       = get('role');
-      const password   = get('password');
+      const branch = get('branch');
+      const role = get('role');
+      const password = get('password');
 
       // Validate required fields
       const rowErrors = [];
-      if (!fullName)   rowErrors.push('fullName is missing');
-      if (!email)      rowErrors.push('email is missing');
+      if (!fullName) rowErrors.push('fullName is missing');
+      if (!email) rowErrors.push('email is missing');
       if (!department) rowErrors.push('department is missing');
-      if (!branch)     rowErrors.push('branch is missing');
+      if (!branch) rowErrors.push('branch is missing');
 
       // Basic email format check
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -263,9 +263,9 @@ exports.updateUser = async (req, res) => {
       user.email = email.toLowerCase().trim();
     }
 
-    if (fullName)   user.fullName   = fullName.trim();
+    if (fullName) user.fullName = fullName.trim();
     if (department) user.department = department.trim();
-    if (branch)     user.branch     = branch.trim();
+    if (branch) user.branch = branch.trim();
     if (role === 'Admin' || role === 'Employee') user.role = role;
 
     await user.save();

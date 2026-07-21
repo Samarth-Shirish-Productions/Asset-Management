@@ -5,15 +5,15 @@ import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
 import Toast from '../components/Toast';
-import { 
-  Plus, 
-  Search, 
-  SlidersHorizontal, 
-  Eye, 
-  Edit3, 
-  Trash2, 
-  UserCheck, 
-  FileText, 
+import {
+  Plus,
+  Search,
+  SlidersHorizontal,
+  Eye,
+  Edit3,
+  Trash2,
+  UserCheck,
+  FileText,
   QrCode,
   Image as ImageIcon,
   CheckCircle,
@@ -30,19 +30,19 @@ import {
 
 /* ─── Excel column spec (shown in format guide) ─── */
 const ASSET_EXCEL_COLUMNS = [
-  { name: 'name',          required: true,  desc: 'Asset name',                                                  example: 'Dell Laptop' },
-  { name: 'model',         required: true,  desc: 'Model / make',                                                example: 'Latitude 5520' },
-  { name: 'serialNumber',  required: true,  desc: 'Unique serial number',                                        example: 'SN-20240001' },
-  { name: 'category',      required: true,  desc: 'Static or Movable',                                           example: 'Movable' },
-  { name: 'subCategory',   required: true,  desc: 'Electronics / Furniture / Vehicle / Software License / Appliances', example: 'Electronics' },
-  { name: 'department',    required: true,  desc: 'Owning department',                                           example: 'IT' },
-  { name: 'branch',        required: true,  desc: 'Branch / location',                                           example: 'Pune' },
-  { name: 'purchaseDate',  required: true,  desc: 'Date purchased YYYY-MM-DD',                                   example: '2024-01-15' },
-  { name: 'purchaseValue', required: true,  desc: 'Purchase cost in ₹',                                          example: '75000' },
-  { name: 'warrantyExpiry',required: false, desc: 'Warranty end date YYYY-MM-DD',                                example: '2027-01-15' },
-  { name: 'vendor',        required: false, desc: 'Supplier / vendor name',                                      example: 'Dell India' },
-  { name: 'status',        required: false, desc: 'Active / In Storage / In Repair / Retired / Lost/Damaged',    example: 'In Storage' },
-  { name: 'notes',         required: false, desc: 'Any additional notes',                                        example: '' },
+  { name: 'name', required: true, desc: 'Asset name', example: 'Dell Laptop' },
+  { name: 'model', required: true, desc: 'Model / make', example: 'Latitude 5520' },
+  { name: 'serialNumber', required: true, desc: 'Unique serial number', example: 'SN-20240001' },
+  { name: 'category', required: true, desc: 'Static or Movable', example: 'Movable' },
+  { name: 'subCategory', required: true, desc: 'Electronics / Furniture / Vehicle / Software License / Appliances', example: 'Electronics' },
+  { name: 'department', required: true, desc: 'Owning department', example: 'IT' },
+  { name: 'branch', required: true, desc: 'Branch / location', example: 'Pune' },
+  { name: 'purchaseDate', required: true, desc: 'Date purchased YYYY-MM-DD', example: '2024-01-15' },
+  { name: 'purchaseValue', required: true, desc: 'Purchase cost in ₹', example: '75000' },
+  { name: 'warrantyExpiry', required: false, desc: 'Warranty end date YYYY-MM-DD', example: '2027-01-15' },
+  { name: 'vendor', required: false, desc: 'Supplier / vendor name', example: 'Dell India' },
+  { name: 'status', required: false, desc: 'Active / In Storage / In Repair / Retired / Lost/Damaged', example: 'In Storage' },
+  { name: 'notes', required: false, desc: 'Any additional notes', example: '' },
 ];
 
 /* ─── Format Guide Modal ─── */
@@ -197,7 +197,7 @@ const AssetBulkResultsModal = ({ results, onClose }) => (
 
 const Assets = () => {
   const { user } = useAuth();
-  
+
   // Table states
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -209,7 +209,7 @@ const Assets = () => {
   const [assignment, setAssignment] = useState('');
   const [sortBy, setSortBy] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
-  
+
   // Pagination
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
@@ -220,10 +220,10 @@ const Assets = () => {
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isRequestOpen, setIsRequestOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
-  
+
   // Employees for assign dropdown
   const [employees, setEmployees] = useState([]);
-  
+
   // Toast notifications
   const [toast, setToast] = useState(null);
 
@@ -245,7 +245,7 @@ const Assets = () => {
   });
   const [imageFile, setImageFile] = useState(null);
   const [invoiceFile, setInvoiceFile] = useState(null);
-  
+
   // Form Fields (Assign)
   const [selectedEmployee, setSelectedEmployee] = useState('');
   const [assignNotes, setAssignNotes] = useState('');
@@ -569,38 +569,38 @@ const Assets = () => {
       key: 'actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button 
+          <button
             onClick={() => openDetailModal(row)}
             className="p-1 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 rounded-lg transition-colors"
             title="View Details"
           >
             <Eye className="w-4.5 h-4.5" />
           </button>
-          
+
           {user.role === 'Admin' ? (
             <>
-              <button 
+              <button
                 onClick={() => openEditModal(row)}
                 className="p-1 text-slate-400 hover:text-blue-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                 title="Edit Asset"
               >
                 <Edit3 className="w-4.5 h-4.5" />
               </button>
-              <button 
+              <button
                 onClick={() => openAssignModal(row)}
                 className="p-1 text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                 title="Assign Asset"
               >
                 <UserCheck className="w-4.5 h-4.5" />
               </button>
-              <button 
+              <button
                 onClick={() => openMaintenanceModal(row)}
                 className="p-1 text-slate-400 hover:text-orange-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                 title="Log Maintenance"
               >
                 <Wrench className="w-4.5 h-4.5" />
               </button>
-              <button 
+              <button
                 onClick={() => handleDeleteAsset(row._id)}
                 className="p-1 text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                 title="Delete Asset"
@@ -609,7 +609,7 @@ const Assets = () => {
               </button>
             </>
           ) : (
-            <button 
+            <button
               onClick={() => openRequestModal(row)}
               className="btn-primary px-3 py-1 text-xs"
             >
@@ -622,7 +622,7 @@ const Assets = () => {
   ];
 
   return (
-    <div className="page-container space-y-6">
+    <div className="space-y-6">
       {/* Top action header */}
       <div className="page-header">
         <div>
@@ -802,8 +802,8 @@ const Assets = () => {
             <option value="unassigned">Unassigned</option>
             {employees.map(emp => <option key={emp._id} value={emp._id}>{emp.fullName}</option>)}
           </select>
-          
-          <button 
+
+          <button
             onClick={handleClearFilters}
             className="ml-auto text-xs font-bold px-3 py-1.5 rounded transition-colors"
             style={{ color: 'var(--accent)', background: 'var(--accent-light)' }}
@@ -1088,8 +1088,8 @@ const Assets = () => {
 
                 <div className="flex gap-4">
                   {selectedAsset.imageUrl && (
-                    <a 
-                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedAsset.imageUrl}`} 
+                    <a
+                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedAsset.imageUrl}`}
                       target="_blank" rel="noreferrer"
                       className="flex items-center gap-1 text-indigo-500 font-bold hover:underline"
                     >
@@ -1098,8 +1098,8 @@ const Assets = () => {
                     </a>
                   )}
                   {selectedAsset.invoiceUrl && user.role === 'Admin' && (
-                    <a 
-                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedAsset.invoiceUrl}`} 
+                    <a
+                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedAsset.invoiceUrl}`}
                       target="_blank" rel="noreferrer"
                       className="flex items-center gap-1 text-indigo-500 font-bold hover:underline"
                     >
@@ -1115,14 +1115,14 @@ const Assets = () => {
                 <div className="flex flex-col items-center">
                   <span className="font-bold text-slate-450 uppercase mb-2">Asset QR Identifier</span>
                   <div className="p-2 border border-slate-200 dark:border-slate-800 bg-white rounded-xl shadow-inner">
-                    <img 
-                      src={selectedAsset.qrCode} 
-                      alt="Asset QR" 
-                      className="w-28 h-28" 
+                    <img
+                      src={selectedAsset.qrCode}
+                      alt="Asset QR"
+                      className="w-28 h-28"
                     />
                   </div>
-                  <a 
-                    href={selectedAsset.qrCode} 
+                  <a
+                    href={selectedAsset.qrCode}
                     download={`QR-${selectedAsset.assetId}.png`}
                     className="text-[10px] font-bold text-indigo-500 hover:text-indigo-600 mt-2 flex items-center gap-1"
                   >
@@ -1138,8 +1138,8 @@ const Assets = () => {
               <h4 className="font-extrabold text-[11px] text-slate-500 uppercase mb-3.5">Lifecycle History Audit Trail</h4>
               <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1">
                 {selectedAsset.auditTrail.map((log, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="p-3 rounded-xl border border-slate-100 dark:border-slate-800/40 bg-slate-50/50 dark:bg-slate-950/20"
                   >
                     <div className="flex justify-between items-center font-bold">
@@ -1308,7 +1308,7 @@ const Assets = () => {
                 className="w-full border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs"
               />
             </div>
-            
+
             <div>
               <label className="block font-bold text-slate-500 uppercase mb-1.5">Expected Return Date</label>
               <input

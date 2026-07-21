@@ -97,6 +97,11 @@ exports.login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid credentials' });
     }
 
+    // TEMPORARY: Restrict login to Administrators only
+    if (user.role !== 'Admin') {
+      return res.status(403).json({ success: false, message: 'Login is temporarily restricted to Administrators only.' });
+    }
+
     // Check account lock status
     if (user.lockUntil && user.lockUntil > Date.now()) {
       const remainingMinutes = Math.ceil((user.lockUntil - Date.now()) / (60 * 1000));
@@ -237,6 +242,30 @@ exports.forgotPassword = async (req, res) => {
   } catch (error) {
     console.error('Forgot password error:', error);
     res.status(500).json({ success: false, message: 'Server error during forgot password' });
+  }
+};
+
+// 6.5 Verify Reset Password OTP
+exports.verifyResetOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ success: false, message: 'Email and OTP are required' });
+    }
+    const user = await User.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP code' });
+    }
+
+    res.json({ success: true, message: 'OTP verified successfully!' });
+  } catch (error) {
+    console.error('Verify reset OTP error:', error);
+    res.status(500).json({ success: false, message: 'Server error during OTP verification' });
   }
 };
 
